@@ -1,0 +1,89 @@
+{% extends "admin/base_site.html" %}
+{% load i18n log %}
+
+{% block bodyclass %}{{ block.super }} dashboard xk-dashboard{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block content_title %}{% endblock %}
+
+{% block content %}
+<section class="xk-dashboard-grid">
+  {% for stat in dashboard_stats %}
+    <article class="xk-stat-card {{ stat.tone }}">
+      <span>{{ stat.label }}</span>
+      <strong>{{ stat.value }}</strong>
+    </article>
+  {% endfor %}
+</section>
+
+<section class="xk-dashboard-layout">
+  <div class="xk-dashboard-left">
+    <section class="xk-card">
+      <div class="xk-card-header">
+        <div>
+          <p>Content</p>
+          <h2>内容管理</h2>
+        </div>
+      </div>
+      <div id="content-main" class="app-list">
+        {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+      </div>
+    </section>
+
+    <section class="xk-quick-actions">
+      <h2>快捷操作</h2>
+      <div class="xk-action-grid">
+        <a class="xk-action-card amber" href="{% url 'admin:portfolio_profile_add' %}">
+          <span>+</span>
+          <strong>添加 Profile</strong>
+          <small>更新个人主页信息</small>
+        </a>
+        <a class="xk-action-card green" href="{% url 'admin:portfolio_project_add' %}">
+          <span>+</span>
+          <strong>添加 Project</strong>
+          <small>创建新的项目作品</small>
+        </a>
+        <a class="xk-action-card blue" href="{% url 'admin:portfolio_blog_add' %}">
+          <span>+</span>
+          <strong>添加 Blog</strong>
+          <small>发布 Markdown 文章</small>
+        </a>
+        <a class="xk-action-card violet" href="{% url 'admin:portfolio_gallery_add' %}">
+          <span>+</span>
+          <strong>添加 Gallery</strong>
+          <small>上传摄影或视觉作品</small>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <aside class="xk-activity-panel">
+    <div class="xk-card-header">
+      <div>
+        <p>Activity</p>
+        <h2>最近动作</h2>
+      </div>
+      <a href="{% url 'admin:index' %}">返回</a>
+    </div>
+
+    {% get_admin_log 8 as admin_log for_user user %}
+    {% if admin_log %}
+      <ul class="xk-activity-list">
+        {% for entry in admin_log %}
+          <li class="{% if entry.is_addition %}is-add{% elif entry.is_change %}is-change{% elif entry.is_deletion %}is-delete{% endif %}">
+            <span>{% if entry.is_addition %}+{% elif entry.is_change %}✎{% elif entry.is_deletion %}−{% endif %}</span>
+            <div>
+              <strong>
+                {% if entry.is_addition %}新增{% elif entry.is_change %}变更{% elif entry.is_deletion %}删除{% endif %}
+                {% if entry.content_type %}{{ entry.content_type.name|capfirst }}{% endif %}
+              </strong>
+              <small>{{ entry.object_repr }}</small>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="xk-empty">暂无最近动作。添加内容后这里会自动显示记录。</p>
+    {% endif %}
+  </aside>
+</section>
+{% endblock %}

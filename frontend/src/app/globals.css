@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7fbfd;
+  --foreground: #0f172a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6.5rem;
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(186, 230, 253, 0.42), transparent 36rem),
+    var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: rgba(125, 211, 252, 0.42);
+  color: #0f172a;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f7fbfd;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border: 3px solid #f7fbfd;
+  border-radius: 999px;
+}
+
+.hero-gradient {
+  background:
+    linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.42) 34%, transparent 62%),
+    radial-gradient(circle at 20% 18%, rgba(186, 230, 253, 0.36), transparent 24rem),
+    radial-gradient(circle at 78% 72%, rgba(219, 234, 254, 0.48), transparent 28rem);
+  background-size: 180% 180%, 100% 100%, 100% 100%;
+  animation: hero-drift 14s ease-in-out infinite alternate;
+}
+
+@keyframes hero-drift {
+  from {
+    background-position: 0% 50%, center, center;
+  }
+
+  to {
+    background-position: 100% 50%, center, center;
+  }
+}

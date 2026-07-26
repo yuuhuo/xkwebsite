@@ -1,0 +1,38 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="xk-dashboard-hero">
+  <p>Portfolio CMS</p>
+  <h1>X.K Personal Lab</h1>
+  <span>管理项目、文章、图库与个人资料</span>
+</div>
+
+{{ block.super }}
+
+<section class="xk-quick-actions" aria-label="Quick actions">
+  <h2>快捷操作</h2>
+  <div class="xk-action-grid">
+    <a class="xk-action-card blue" href="{% url 'admin:portfolio_blog_add' %}">
+      <span>+</span>
+      <strong>添加 Blog</strong>
+      <small>创建新的 Markdown 文章</small>
+    </a>
+    <a class="xk-action-card green" href="{% url 'admin:portfolio_project_add' %}">
+      <span>+</span>
+      <strong>添加 Project</strong>
+      <small>新增科研或软件项目</small>
+    </a>
+    <a class="xk-action-card violet" href="{% url 'admin:portfolio_gallery_add' %}">
+      <span>+</span>
+      <strong>添加 Gallery</strong>
+      <small>上传视觉作品图片</small>
+    </a>
+    <a class="xk-action-card amber" href="{% url 'admin:portfolio_profile_add' %}">
+      <span>+</span>
+      <strong>添加 Profile</strong>
+      <small>更新个人主页信息</small>
+    </a>
+  </div>
+</section>
+{% endblock %}

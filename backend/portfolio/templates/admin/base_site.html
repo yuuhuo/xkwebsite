@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %}
+{% load static i18n %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | X.K Admin{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'portfolio/admin-modern.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div class="xk-brand">
+  <a href="{% url 'admin:index' %}" aria-label="X.K Admin Home">
+    <span class="xk-brand-mark">XK</span>
+    <span class="xk-brand-copy">
+      <strong>X.K</strong>
+      <span>{% translate "管理后台" %}</span>
+    </span>
+  </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
