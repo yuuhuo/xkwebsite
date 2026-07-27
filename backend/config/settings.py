@@ -172,6 +172,8 @@ if USE_CLOUD_STORAGE:
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
+    if CLOUDFLARE_R2_PUBLIC_URL:
+        AWS_S3_CUSTOM_DOMAIN = CLOUDFLARE_R2_PUBLIC_URL.replace("https://", "").replace("http://", "")
     AWS_S3_OBJECT_PARAMETERS = {
         "CacheControl": "max-age=86400",
     }
