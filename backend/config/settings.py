@@ -23,9 +23,17 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
+DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+def env_list(name, default=""):
+    value = os.getenv(name, default)
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost")
+railway_public_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN")
+if railway_public_domain:
+    ALLOWED_HOSTS.append(railway_public_domain)
 if DEBUG:
     ALLOWED_HOSTS.append("testserver")
 
@@ -77,17 +85,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-mysql_database = os.getenv("MYSQL_DATABASE")
+mysql_database = os.getenv("MYSQL_DATABASE") or os.getenv("MYSQLDATABASE")
 
 if mysql_database:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "NAME": mysql_database,
-            "USER": os.getenv("MYSQL_USER", "root"),
-            "PASSWORD": os.getenv("MYSQL_PASSWORD", ""),
-            "HOST": os.getenv("MYSQL_HOST", "127.0.0.1"),
-            "PORT": os.getenv("MYSQL_PORT", "3306"),
+            "USER": os.getenv("MYSQL_USER") or os.getenv("MYSQLUSER", "root"),
+            "PASSWORD": os.getenv("MYSQL_PASSWORD") or os.getenv("MYSQLPASSWORD", ""),
+            "HOST": os.getenv("MYSQL_HOST") or os.getenv("MYSQLHOST", "127.0.0.1"),
+            "PORT": os.getenv("MYSQL_PORT") or os.getenv("MYSQLPORT", "3306"),
             "OPTIONS": {
                 "charset": "utf8mb4",
             },
@@ -150,6 +158,10 @@ CORS_ALLOWED_ORIGINS = os.getenv(
     "CORS_ALLOWED_ORIGINS",
     "http://127.0.0.1:3000,http://localhost:3000",
 ).split(",")
+
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+if railway_public_domain:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{railway_public_domain}")
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
